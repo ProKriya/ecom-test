@@ -2,7 +2,7 @@ import { generateId, calculateDiscount, calculateTotal, isNthOrder, calculateSub
 import { NotFoundError, BadRequestError } from '../shared/errors.js';
 import { getCart, clearCart } from '../cart/index.js';
 import { validateDiscountCode } from '../discount/index.js';
-import { NTH_ORDER, DISCOUNT_PERCENTAGE } from '../shared/constants.js';
+import { runtimeConfig } from '../shared/constants.js';
 
 const orders = [];
 let globalOrderCounter = 0;
@@ -14,10 +14,10 @@ function resolveNthOrderConfig(config = {}) {
   const discountPercentage = Number(config.discountPercentage);
 
   return {
-    nthOrder: Number.isFinite(nthOrder) && nthOrder > 0 ? nthOrder : NTH_ORDER,
+    nthOrder: Number.isFinite(nthOrder) && nthOrder > 0 ? nthOrder : runtimeConfig.nthOrder,
     discountPercentage: Number.isFinite(discountPercentage) && discountPercentage >= 0 && discountPercentage <= 100
       ? discountPercentage
-      : DISCOUNT_PERCENTAGE
+      : runtimeConfig.discountPercentage
   };
 }
 

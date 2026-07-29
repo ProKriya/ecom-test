@@ -3,17 +3,13 @@
  */
 
 /**
- * Default nth order for discount (configurable via environment variables)
- * Every NTH_ORDER-th order gets a discount code automatically
- * @constant {number}
+ * Runtime config — populated by src/index.js from wrangler.toml [vars] env
+ * @constant {Object}
  */
-export const NTH_ORDER = 5;
-
-/**
- * Default discount percentage for nth order (configurable via environment variables)
- * @constant {number}
- */
-export const DISCOUNT_PERCENTAGE = 10;
+export const runtimeConfig = {
+  nthOrder: 5,
+  discountPercentage: 10
+};
 
 /**
  * Environment variable names

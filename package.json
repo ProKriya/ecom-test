@@ -10,7 +10,8 @@
     "ui:build": "vite build --config frontend/vite.config.js",
     "ui:preview": "vite preview --config frontend/vite.config.js",
     "lint": "eslint src/ frontend/src --ext .js,.jsx",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:api": "vitest run --config vitest.api.config.js"
   },
   "keywords": [],
   "author": "",

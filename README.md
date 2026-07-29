@@ -17,6 +17,7 @@ Small ecommerce demo: Cloudflare Worker API + Preact storefront, both served fro
 - In-memory storage for carts, orders, and discounts
 - Vitest for unit and integration tests
 
+
 ## Scripts
 
 - `npm run dev` - run worker and UI together through Wrangler
@@ -24,8 +25,17 @@ Small ecommerce demo: Cloudflare Worker API + Preact storefront, both served fro
 - `npm run ui:dev` - run Vite storefront only
 - `npm run ui:build` - build storefront into `frontend/dist`
 - `npm run ui:preview` - preview built storefront
-- `npm test` - run Vitest suite
+- `npm test` - run unit + integration tests (74 tests)
+- `npm run test:api` - run API-level integration tests (29 tests, calls worker.fetch directly)
 - `npm run lint` - lint `src/` and `frontend/src/`
+
+
+# or via make
+- `make` / `make test` - same as `npm test`
+- `make test-api` - same as `npm run test:api`
+- `make dev` - same as `npm run dev`
+- `make deploy` - same as `npm run deploy`
+- `make lint` - same as `npm run lint`
 
 ## Local Dev
 
@@ -63,6 +73,7 @@ Core routes:
 - `src/` - Worker API and business logic
 - `frontend/` - Preact storefront
 - `tests/` - unit and integration coverage
+- `api-tests/` - API-level integration tests (hits worker.fetch directly)
 - `docs/` - docs index and notes
 - `wrangler.toml` - Worker config
 

@@ -13,3 +13,5 @@ run_worker_first = true
 
 [vars]
 API_VERSION = "v1"
+NTH_ORDER = "5"
+DISCOUNT_PERCENTAGE = "10"

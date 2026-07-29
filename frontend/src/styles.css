@@ -165,6 +165,69 @@ main {
   gap: 22px;
 }
 
+.page-nav {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow);
+  margin-bottom: 22px;
+}
+
+.page-nav-link {
+  flex: 1;
+  text-align: center;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.page-nav-link:hover {
+  color: var(--text);
+  background: rgba(31, 26, 20, 0.04);
+}
+
+.page-nav-link--active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  box-shadow: 0 4px 12px rgba(37, 95, 68, 0.2);
+}
+
+.nav-cart-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-cart-badge {
+  position: absolute;
+  top: -10px;
+  right: -14px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+
+.cart-page,
+.orders-page {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
 .card {
   border: 1px solid var(--line);
   background: var(--surface);
@@ -369,6 +432,40 @@ main {
   background: rgba(37, 95, 68, 0.08);
 }
 
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+}
+
+.stepper-btn {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: transparent;
+  color: var(--accent-strong);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.stepper-btn:hover {
+  background: rgba(37, 95, 68, 0.1);
+}
+
+.stepper-qty {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
 .link-button {
   padding: 0;
   color: var(--accent-strong);
@@ -521,6 +618,74 @@ main {
   .stats-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: rgba(31, 26, 20, 0.35);
+  backdrop-filter: blur(4px);
+  padding: 20px;
+}
+
+.dialog {
+  width: 100%;
+  max-width: 400px;
+  padding: 28px;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+  box-shadow: 0 24px 64px rgba(31, 26, 20, 0.18);
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.invoice {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.invoice div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.invoice dt {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.invoice dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.invoice-total {
+  border-bottom: 0 !important;
+  padding-top: 4px;
+}
+
+.invoice-total dt,
+.invoice-total dd {
+  font-size: 1.2rem;
+}
+
+.discount-code {
+  font-family: "SF Mono", "Consolas", monospace;
+  letter-spacing: 0.06em;
+  color: var(--accent-strong);
 }
 
 @media (max-width: 720px) {

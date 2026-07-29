@@ -1,9 +1,9 @@
 import { NotFoundError, BadRequestError } from './shared/errors.js';
-import { getCart, addToCart, removeFromCart, clearCart } from './cart/index.js';
+import { getCart, addToCart, removeFromCart, clearCart, updateItemQuantity } from './cart/index.js';
 import { createOrder, getOrder, getUserOrderHistory, getAllOrders } from './order/index.js';
 import { validateDiscountCode } from './discount/index.js';
 import { generateAdminDiscountCode, getAdminAnalytics, getAdminStorage } from './admin/index.js';
-import { NTH_ORDER, DISCOUNT_PERCENTAGE } from './shared/constants.js';
+import { runtimeConfig } from './shared/constants.js';
 
 const JSON_HEADERS = {
   'Content-Type': 'application/json'
@@ -12,7 +12,7 @@ const JSON_HEADERS = {
 function corsHeaders() {
   return {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type'
   };
 }
@@ -74,11 +74,15 @@ async function handleApiRequest(request, env) {
   const method = request.method.toUpperCase();
   const rawNthOrder = Number(env?.NTH_ORDER);
   const rawDiscountPercentage = Number(env?.DISCOUNT_PERCENTAGE);
+  if (Number.isFinite(rawNthOrder) && rawNthOrder > 0) {
+    runtimeConfig.nthOrder = rawNthOrder;
+  }
+  if (Number.isFinite(rawDiscountPercentage) && rawDiscountPercentage >= 0 && rawDiscountPercentage <= 100) {
+    runtimeConfig.discountPercentage = rawDiscountPercentage;
+  }
   const nthOrderConfig = {
-    nthOrder: Number.isFinite(rawNthOrder) && rawNthOrder > 0 ? rawNthOrder : NTH_ORDER,
-    discountPercentage: Number.isFinite(rawDiscountPercentage) && rawDiscountPercentage >= 0 && rawDiscountPercentage <= 100
-      ? rawDiscountPercentage
-      : DISCOUNT_PERCENTAGE
+    nthOrder: runtimeConfig.nthOrder,
+    discountPercentage: runtimeConfig.discountPercentage
   };
 
   if (method === 'OPTIONS') {
@@ -178,6 +182,20 @@ async function handleApiRequest(request, env) {
       }
 
       return jsonResponse(removeFromCart(cartId, productId));
+    }
+
+    if (method === 'PATCH' && matchPrefix(pathname, '/api/cart/') && pathname.includes('/items/')) {
+      const base = '/api/cart/';
+      const itemsIndex = pathname.indexOf('/items/');
+      const cartId = decodeURIComponent(pathname.slice(base.length, itemsIndex));
+      const productId = decodeURIComponent(pathname.slice(itemsIndex + '/items/'.length));
+
+      if (!cartId || !productId) {
+        throw new NotFoundError('Endpoint not found');
+      }
+
+      const { quantity } = await readJsonBody(request);
+      return jsonResponse(updateItemQuantity(cartId, productId, quantity));
     }
 
     if (method === 'DELETE' && matchPrefix(pathname, '/api/cart/')) {
