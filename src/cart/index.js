@@ -42,7 +42,7 @@ export function addToCart(cartId, userId, product) {
   let cart = carts.get(cartId);
 
   if (!cart) {
-    // Create new cart
+    // Auto-create cart on first add — no separate create-cart step needed
     cart = {
       id: cartId,
       userId: userId,
@@ -53,17 +53,14 @@ export function addToCart(cartId, userId, product) {
     carts.set(cartId, cart);
     usersCarts.set(userId, cartId);
   } else {
-    // Update timestamp
     cart.updatedAt = new Date();
   }
 
-  // Add item (or increment quantity if product already exists)
+  // Find existing item by productId, increment qty instead of duplicating
   const existingItemIndex = cart.items.findIndex(item => item.productId === product.productId);
   if (existingItemIndex >= 0) {
-    // Update existing item
     cart.items[existingItemIndex].quantity += product.quantity;
   } else {
-    // Add new item
     cart.items.push({
       productId: product.productId,
       productName: product.productName,
@@ -88,7 +85,7 @@ export function removeFromCart(cartId, productId) {
   cart.items = cart.items.filter(item => item.productId !== productId);
   cart.updatedAt = new Date();
 
-  // If cart is now empty, clean up
+  // Purge cart from storage when last item removed — no zombie carts
   if (cart.items.length === 0) {
     const userId = cart.userId;
     carts.delete(cartId);
@@ -192,8 +189,7 @@ export function updateItemQuantity(cartId, productId, quantity) {
   }
 
   if (quantity <= 0) {
-    // Remove item if quantity <= 0
-    cart.items.splice(itemIndex, 1);
+    cart.items.splice(itemIndex, 1); // Zero/negative quantity = remove line item
   } else {
     // Update quantity
     cart.items[itemIndex].quantity = quantity;

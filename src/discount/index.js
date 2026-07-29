@@ -5,8 +5,8 @@ import { NotFoundError, ConflictError } from '../shared/errors.js';
  * In-memory storage for discount codes and nth order tracking
  * In a real Cloudflare Worker, these would be stored in KV or D1
  */
-const discountCodes = new Map(); // { code: DiscountCode }
-const usedCodes = new Set(); // { code } for nth order tracking
+const discountCodes = new Map();
+const usedCodes = new Set(); // Tracks nth_order codes already consumed (one-time-use)
 
 /**
  * Generate a new discount code
@@ -78,7 +78,7 @@ export function validateDiscountCode(code) {
     throw new NotFoundError('Discount code has expired');
   }
 
-  // Check for nth order duplicate
+  // nth_order codes are single-use — track in separate Set to prevent replay
   if (discount.type === 'nth_order') {
     if (usedCodes.has(code)) {
       throw new ConflictError('Nth order discount already applied');

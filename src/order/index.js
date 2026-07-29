@@ -23,7 +23,7 @@ function resolveNthOrderConfig(config = {}) {
 
 function applyNthOrderLogic(subtotal, config = {}) {
   const { nthOrder, discountPercentage } = resolveNthOrderConfig(config);
-  globalOrderCounter++;
+  globalOrderCounter++; // Increment per-order, used by isNthOrder to detect threshold hit
 
   if (isNthOrder(globalOrderCounter, nthOrder)) {
     const discount = {
@@ -81,14 +81,14 @@ export function createOrder(input, config = {}) {
 
   const nthOrderDiscount = applyNthOrderLogic(subtotal, config);
   if (nthOrderDiscount) {
-    discountAmount += nthOrderDiscount.discountAmount;
+    discountAmount += nthOrderDiscount.discountAmount; // Stack manual + nth-order discounts
     discountPercentage = nthOrderDiscount.percentage;
     appliedDiscountCode = nthOrderDiscount.code;
   }
 
   const totalDiscount = discountAmount;
   if (totalDiscount > subtotal) {
-    discountAmount = subtotal;
+    discountAmount = subtotal; // Cap discount so order never goes negative
   }
 
   const finalAmount = calculateTotal(subtotal, discountAmount);

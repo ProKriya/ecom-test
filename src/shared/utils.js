@@ -49,7 +49,7 @@ export function calculateTotal(subtotal, discountAmount) {
  * @returns {boolean} True if current order is an nth order
  */
 export function isNthOrder(count, nthOrder) {
-  return count % nthOrder === 0 && count > 0;
+  return count % nthOrder === 0 && count > 0; // Skip order 0 — counter starts at 1
 }
 
 /**

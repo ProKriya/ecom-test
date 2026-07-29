@@ -30,6 +30,7 @@ function readSession() {
 }
 
 function formatCouponError(error) {
+  // Map backend error shapes to user-friendly messages without exposing internals
   const message = String(error?.message || '').toLowerCase();
   if (error?.status === 404 || message.includes('invalid discount code')) return 'Invalid coupon code.';
   if (error?.status === 409 || message.includes('already used') || message.includes('already applied')) return 'Coupon already used.';
@@ -38,6 +39,7 @@ function formatCouponError(error) {
 }
 
 function useRouter() {
+  // Hash-based routing — no router library, relies on hashchange event
   const [route, setRoute] = useState(() => {
     const hash = window.location.hash.slice(1);
     return ROUTES[hash] ? hash : '/';
@@ -322,6 +324,14 @@ export function App() {
         />
         {error ? <div className="error-banner">{error}</div> : null}
       </main>
+
+      {cartItems.length > 0 ? (
+        <button type="button" className="button button-primary sticky-checkout" onClick={() => navigate('/cart')}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          Checkout
+          <span className="button-primary sticky-checkout-badge">{cartItems.length}</span>
+        </button>
+      ) : null}
     </div>
   );
 }

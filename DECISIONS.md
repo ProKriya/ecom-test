@@ -35,7 +35,7 @@ The assignment and tests only needed a lightweight store, not persistence, and t
 
 **Choice:** Option B
 
-**Why:** In-memory state keeps the code small, testable, and easy to reset between runs. It also matches the current business logic and avoids storage setup overhead.
+**Why:** In-memory state keeps the code small, testable, and easy to reset between runs (for starting out). It also matches the current business logic and avoids storage setup overhead. For production obviously a DB is needed.
 
 ## Decision: Local Session IDs for Cart and User
 

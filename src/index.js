@@ -48,7 +48,7 @@ function stripTrailingSlash(pathname) {
   if (pathname.length > 1 && pathname.endsWith('/')) {
     return pathname.slice(0, -1);
   }
-  return pathname;
+  return pathname; // Normalize so /api/cart/ and /api/cart match same route
 }
 
 function createHealthResponse(apiVersion = 'v1') {
@@ -75,7 +75,7 @@ async function handleApiRequest(request, env) {
   const rawNthOrder = Number(env?.NTH_ORDER);
   const rawDiscountPercentage = Number(env?.DISCOUNT_PERCENTAGE);
   if (Number.isFinite(rawNthOrder) && rawNthOrder > 0) {
-    runtimeConfig.nthOrder = rawNthOrder;
+    runtimeConfig.nthOrder = rawNthOrder; // Override defaults from wrangler.toml [vars]
   }
   if (Number.isFinite(rawDiscountPercentage) && rawDiscountPercentage >= 0 && rawDiscountPercentage <= 100) {
     runtimeConfig.discountPercentage = rawDiscountPercentage;
@@ -149,7 +149,7 @@ async function handleApiRequest(request, env) {
         return jsonResponse(getCart(cartId));
       } catch (error) {
         if (error instanceof NotFoundError) {
-          return jsonResponse({
+          return jsonResponse({ // Return empty shell instead of 404 so client can init from it
             id: cartId,
             userId: null,
             items: [],
@@ -255,12 +255,13 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // Route API/health to handler, everything else to static assets
     if (url.pathname === '/health' || url.pathname.startsWith('/api/')) {
       return handleApiRequest(request, env);
     }
 
     if (env.ASSETS) {
-      return env.ASSETS.fetch(request);
+      return env.ASSETS.fetch(request); // Serve frontend SPA from ./frontend/dist
     }
 
     return jsonResponse({ error: 'Endpoint not found' }, 404);

@@ -60,18 +60,13 @@ export function getAdminAnalytics() {
   let totalDiscountsGiven = 0;
   let nthOrderCount = 0;
 
-  // Process each order
   allOrders.forEach(order => {
-    // Count items
     totalItems += order.items.reduce((sum, item) => sum + item.quantity, 0);
-
-    // Calculate revenue
     totalRevenue += order.finalAmount;
-
-    // Calculate total discounts given
     totalDiscountsGiven += order.discountAmount;
 
-    // Count nth order discounts
+    // Cross-reference order's discountCode against nthOrderDiscounts array
+    // to distinguish auto-generated codes from admin-generated ones
     if (order.discountCode) {
       const discount = nthOrderDiscounts.find(d => d.code === order.discountCode);
       if (discount && discount.type === 'nth_order') {
