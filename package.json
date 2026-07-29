@@ -1,0 +1,31 @@
+{
+  "name": "unibloxws",
+  "version": "1.0.0",
+  "description": "You are designing an ecommerce store. Clients can add items to their cart and checkout to successfully place an order.  The store has a discount system that rewards customers.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "ui:dev": "vite --config frontend/vite.config.js",
+    "ui:build": "vite build --config frontend/vite.config.js",
+    "ui:preview": "vite preview --config frontend/vite.config.js",
+    "lint": "eslint src/ frontend/src --ext .js,.jsx",
+    "test": "vitest run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "itty-router": "^5.0.24",
+    "preact": "^10.29.7",
+    "uuid": "^14.0.1",
+    "wrangler": "^4.114.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^8.57.1",
+    "vitest": "^1.6.1"
+  }
+}
